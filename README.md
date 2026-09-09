@@ -5,7 +5,8 @@
 > the client. No TanStack, no router, no solid-query, no `<For>`, no `<Show>`. The server at rc.7
 > consumes one extra hydration id for every `<a {...props} />` whose props include `children`; the
 > client numbers contiguously, so every element after the first such anchor hydrates onto the wrong
-> node or a detached one. Not yet filed upstream.
+> node or a detached one. Filed as
+> [solidjs/solid#3313](https://github.com/solidjs/solid/issues/3313).
 
 A wrapper component that spreads its props onto an `<a>` — a `StepLink` —
 
