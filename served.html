@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>solid2 spread+children hydration id skew repro (subject)</title>
+<style>
+	body { font: 15px/1.5 system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+	h1 { font-size: 1.2rem; margin: 0 0 .25rem; }
+	.explain { color: #555; margin: 0 0 1.25rem; }
+	.explain code { background: #f2f2f2; padding: 0 .25em; border-radius: 3px; }
+	.variants { font-size: .9rem; margin-bottom: 1.5rem; }
+	#root { border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; background: #fafafa; }
+	#nav { display: flex; align-items: center; gap: .5rem; }
+	.step { display: inline-flex; align-items: center; padding: .4rem .9rem; border: 1px solid #888; border-radius: 999px; text-decoration: none; color: #222; background: #fff; }
+	.step.current { background: #2a5bd7; border-color: #2a5bd7; color: #fff; cursor: default; }
+	.step.nav-arrow { width: 2.25rem; height: 2.25rem; padding: 0; justify-content: center; }
+	.step svg { width: 1.25rem; height: 1.25rem; }
+	#after { margin: 1rem 0 0; font-size: 1rem; }
+</style>
+<script>window._$HY||(e=>{let t=e=>e&&e.hasAttribute&&(e.hasAttribute("_hk")?e:t(e.host&&e.host.nodeType?e.host:e.parentNode));["click","input"].forEach((o=>document.addEventListener(o,(o=>{if(!e.events)return;let s=t(o.composedPath&&o.composedPath()[0]||o.target);s&&!e.completed.has(s)&&e.events.push([s,o])}))))})(_$HY={events:[],completed:new WeakSet,r:{},fe(){}});</script><!--xs-->
+</head>
+<body>
+<h1>Spread props carrying <code>children</code> skip an SSR hydration id (solid 2.0.0-rc.7)</h1>
+<p class="explain">
+	The box below is server-rendered and then hydrated. Its three pills are one wrapper component
+	rendered three times — variant <code>subject</code>. <strong>Open the devtools console</strong>:
+	at solid rc.7 the spread variants log <code>Hydration key miss</code> / <code>Hydration tag mismatch</code>
+	warnings and a <code>REACTIVITY_HALTED</code> error; the controls log nothing. Then <strong>click
+	“Details” and the ‹ arrow</strong>: each click should add 1 to the counter. When the anchors have
+	hydrated onto the wrong nodes, the counter stays at 0 (and the click falls through to the plain
+	<code>href</code>). On the broken variants the “Details” pill also renders <em>empty</em>: its
+	server-rendered child was claimed by the wrong client node and moved.
+</p>
+<p class="variants">Variants: <strong>subject</strong> · <a href="/?variant=spread-only">spread-only</a> · <a href="/?variant=spread-href">spread-href</a> · <a href="/?variant=spread-onclick">spread-onclick</a> · <a href="/?variant=spread-explicit-children">spread-explicit-children</a> · <a href="/?variant=control">control</a> · <a href="/?variant=childless">childless</a> · <a href="/?variant=split-children">split-children</a></p>
+<div id="root"><nav _hk=000 id="nav"><!--$--><a _hk=001 aria-disabled="true" tabindex="-1" class="step current" style="z-index:1" ><span _hk=003 class="label a">Overview</span></a><!--/--><!--$--><a _hk=004 id="two" class="step" href="#two"><span _hk=006 class="label b">Details</span></a><!--/--><!--$--><a _hk=007 id="prev" role="button" aria-label="Previous Step" class="step nav-arrow" title="Previous Step" href="#prev"><svg _hk=009 class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></a><!--/--></nav><pre _hk=00a id="after">count: <!--$-->0<!--/--></pre></div>
+<script type="module" src="/src/entry-client.tsx"></script>
+</body>
+</html>
