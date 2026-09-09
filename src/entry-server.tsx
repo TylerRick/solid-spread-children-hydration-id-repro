@@ -23,9 +23,7 @@ export async function render(variant: string): Promise<string> {
 		'split-children',
 	];
 	const links = variants
-		.map((v) =>
-			v === variant ? `<strong>${v}</strong>` : `<a href="/?variant=${v}">${v}</a>`,
-		)
+		.map((v) => (v === variant ? `<strong>${v}</strong>` : `<a href="/?variant=${v}">${v}</a>`))
 		.join(' · ');
 	// Everything outside #root is static chrome for a human reader. It is NOT part of the hydrated
 	// tree, so it cannot change the hydration ids the repro is about.
